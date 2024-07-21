@@ -1,0 +1,19 @@
+{
+  "name": "@cactus/core",
+  "author": "Declan L. Scott",
+  "exports": {
+    "./*": [
+      "./src/*/index.ts"
+    ]
+  },
+  "scripts": {
+    "lint": "eslint ./src/ --ext ts --report-unused-disable-directives --max-warnings 0"
+  },
+  "devDependencies": {
+    "@cactus/eslint-config": "workspace:*",
+    "@tsconfig/node20": "^20.1.4"
+  },
+  "dependencies": {
+    "valibot": "^0.36.0"
+  }
+}

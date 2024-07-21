@@ -1,0 +1,20 @@
+{
+  "name": "cactus",
+  "author": "Declan L. Scott",
+  "scripts": {
+    "dev": "sst dev",
+    "format:check": "prettier --check .",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@cactus/core": "workspace:*",
+    "sst": "ion"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
+    "@tsconfig/node20": "^20.1.4",
+    "@types/node": "^20.14.11",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.3"
+  }
+}

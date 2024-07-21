@@ -1,0 +1,21 @@
+{
+  "name": "@cactus/functions",
+  "author": "Declan L. Scott",
+  "scripts": {
+    "lint": "eslint ./src/ --ext ts --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.616.0",
+    "@aws-sdk/client-sesv2": "^3.616.0",
+    "@cactus/core": "workspace:*",
+    "hono": "^4.5.1",
+    "jsx-email": "^1.12.1",
+    "remeda": "^2.6.0",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@cactus/eslint-config": "workspace:*",
+    "@tsconfig/node20": "^20.1.4",
+    "@types/uuid": "^10.0.0"
+  }
+}
