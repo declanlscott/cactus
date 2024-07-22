@@ -37,15 +37,17 @@ export default new Hono()
       const formId = c.get("requestId");
       const { name, schema } = c.req.valid("json");
 
-      c.get("ddb").send(
+      const { client, marshall } = c.get("ddb");
+
+      client.send(
         new PutItemCommand({
           TableName: Resource.Table.name,
           Item: {
-            [PK]: pk({ prefix: prefix.site, value: siteId }),
-            [SK]: sk([{ prefix: prefix.form, value: formId }]),
-            name: { S: name },
-            schema: c.get("attributeValue")(schema),
-            createdAt: { S: new Date().toISOString() },
+            [PK]: marshall(pk({ prefix: prefix.site, value: siteId })),
+            [SK]: marshall(sk([{ prefix: prefix.form, value: formId }])),
+            name: marshall(name),
+            schema: schema ? { M: marshall(schema) } : { NULL: true },
+            createdAt: marshall(new Date().toISOString()),
           },
         }),
       );
@@ -70,15 +72,17 @@ export default new Hono()
       }),
     ),
     async (c) => {
+      const { client, marshall } = c.get("ddb");
+
       const { siteId, formId } = c.req.valid("param");
       const { name, schema } = c.req.valid("json");
 
-      c.get("ddb").send(
+      client.send(
         new UpdateItemCommand({
           TableName: Resource.Table.name,
           Key: {
-            [PK]: pk({ prefix: prefix.site, value: siteId }),
-            [SK]: sk([{ prefix: prefix.form, value: formId }]),
+            [PK]: marshall(pk({ prefix: prefix.site, value: siteId })),
+            [SK]: marshall(sk([{ prefix: prefix.form, value: formId }])),
           },
           UpdateExpression: name
             ? "SET #name = :name AND SET #schema = :schema"
@@ -89,11 +93,11 @@ export default new Hono()
           },
           ExpressionAttributeValues: name
             ? {
-                ":name": { S: name },
-                ":schema": c.get("attributeValue")(schema),
+                ":name": marshall(name),
+                ":schema": marshall(schema),
               }
             : {
-                ":schema": c.get("attributeValue")(schema),
+                ":schema": marshall(schema),
               },
         }),
       );

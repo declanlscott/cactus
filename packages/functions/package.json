@@ -7,10 +7,10 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.616.0",
     "@aws-sdk/client-sesv2": "^3.616.0",
+    "@aws-sdk/util-dynamodb": "^3.616.0",
     "@cactus/core": "workspace:*",
     "hono": "^4.5.1",
     "jsx-email": "^1.12.1",
-    "remeda": "^2.6.0",
     "uuid": "^10.0.0"
   },
   "devDependencies": {

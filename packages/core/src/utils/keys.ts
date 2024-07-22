@@ -23,11 +23,8 @@ export const stripPrefix = <TPrefix extends string>(
 export const delimitKeys = (keys: Array<string>) =>
   `${keys.join(KEY_DELIMITER)}${KEY_DELIMITER}`;
 
-export const pk = <TPrefix extends string, TValue extends string>(key: {
-  prefix: TPrefix;
-  value: TValue;
-}) => ({ S: withPrefix(key) });
+export const pk = withPrefix;
 
 export const sk = <TPrefix extends string, TValue extends string>(
   keys: Array<{ prefix: TPrefix; value: TValue }>,
-) => ({ S: delimitKeys(keys.map(withPrefix)) });
+) => delimitKeys(keys.map(withPrefix));

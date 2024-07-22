@@ -1,22 +1,22 @@
 import Ajv from "ajv";
 
-import type { AnySchema, JSONSchemaType } from "ajv";
+import type { SchemaObject } from "ajv";
 import type { HttpError } from "../errors";
 import type { CustomError } from "../types/errors";
 
-export type { JSONSchemaType } from "ajv";
+export type JsonSchema = SchemaObject;
 
 export const ajv = new Ajv();
 
-export const validateSchema = <TSchema extends AnySchema>(schema: TSchema) =>
+export const validateSchema = <TSchema extends SchemaObject>(schema: TSchema) =>
   ajv.validateSchema(schema);
 
 export const ajvValidator =
-  <TSchema, TError extends HttpError>(
-    schema: JSONSchemaType<TSchema>,
+  <TError extends HttpError>(
+    schema: JsonSchema,
     customError?: CustomError<TError>,
   ) =>
-  (data: unknown) => {
+  (data: Record<string, unknown>) => {
     const validate = ajv.compile(schema);
 
     const isValid = validate(data);

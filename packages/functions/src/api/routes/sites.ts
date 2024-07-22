@@ -20,16 +20,18 @@ export default new Hono()
       }),
     ),
     async (c) => {
+      const { client, marshall } = c.get("ddb");
+
       const siteId = c.get("requestId");
 
-      c.get("ddb").send(
+      client.send(
         new PutItemCommand({
           TableName: Resource.Table.name,
           Item: {
-            [PK]: pk({ prefix: prefix.site, value: siteId }),
-            [SK]: sk([{ prefix: prefix.site, value: siteId }]),
-            name: { S: c.req.valid("json").name },
-            createdAt: { S: new Date().toISOString() },
+            [PK]: marshall(pk({ prefix: prefix.site, value: siteId })),
+            [SK]: marshall(sk([{ prefix: prefix.site, value: siteId }])),
+            name: marshall(c.req.valid("json").name),
+            createdAt: marshall(new Date().toISOString()),
           },
         }),
       );

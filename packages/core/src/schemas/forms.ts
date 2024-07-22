@@ -7,9 +7,12 @@ export const PostFormPathParams = v.object({
 });
 export type PostFormPathParams = v.InferOutput<typeof PostFormPathParams>;
 
+export const FormSchema = v.nullish(v.looseObject({}));
+export type FormSchema = v.InferOutput<typeof FormSchema>;
+
 export const PostFormJson = v.object({
   name: v.pipe(v.string(), v.trim()),
-  schema: v.optional(v.looseObject({})),
+  schema: FormSchema,
 });
 export type PostFormJson = v.InferOutput<typeof PostFormJson>;
 
