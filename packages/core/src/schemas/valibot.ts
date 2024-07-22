@@ -1,13 +1,9 @@
 import * as v from "valibot";
 
 import type { HttpError } from "../errors/http";
+import type { CustomError } from "../types/errors";
 
-export type CustomError<TError extends HttpError> = {
-  Error: new (message?: string, statusCode?: number) => TError;
-  message?: string;
-};
-
-export const validator =
+export const vValidator =
   <TSchema extends v.GenericSchema, TError extends HttpError>(
     schema: TSchema,
     customError?: CustomError<TError>,
