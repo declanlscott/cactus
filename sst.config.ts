@@ -17,6 +17,8 @@ export default $config({
               : `${AWS_ORG_NAME}-dev`,
           region: "us-east-2",
         },
+        cloudflare: true,
+        tls: true,
       },
     };
   },

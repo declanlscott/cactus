@@ -9,13 +9,16 @@
     "@aws-sdk/client-sesv2": "^3.616.0",
     "@aws-sdk/util-dynamodb": "^3.616.0",
     "@cactus/core": "workspace:*",
+    "@hono/valibot-validator": "^0.3.0",
     "hono": "^4.5.1",
-    "jsx-email": "^1.12.1",
-    "uuid": "^10.0.0"
+    "react": "^18.3.1",
+    "uuid": "^10.0.0",
+    "valibot": "^0.36.0"
   },
   "devDependencies": {
     "@cactus/eslint-config": "workspace:*",
     "@tsconfig/node20": "^20.1.4",
+    "@types/react": "^18.3.3",
     "@types/uuid": "^10.0.0"
   }
 }

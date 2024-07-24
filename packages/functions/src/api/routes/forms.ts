@@ -1,41 +1,49 @@
 import { Hono } from "hono";
-import { validator } from "hono/validator";
-import { PutItemCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
-import { PK, prefix, SK } from "@cactus/core/constants";
-import { BadRequestError } from "@cactus/core/errors";
+import { jwt } from "hono/jwt";
 import {
-  PatchFormJson,
-  PatchFormPathParams,
-  PostFormJson,
-  PostFormPathParams,
-  vValidator,
-} from "@cactus/core/schemas";
+  AttributeValue,
+  PutItemCommand,
+  UpdateItemCommand,
+  UpdateItemCommandInput,
+} from "@aws-sdk/client-dynamodb";
+import {
+  GSI1PK,
+  GSI1SK,
+  jwtAlgorithm,
+  PK,
+  prefix,
+  SK,
+} from "@cactus/core/constants";
+import { FormEmails, FormName, FormSchema, Uuid } from "@cactus/core/schemas";
 import { pk, sk } from "@cactus/core/utils";
+import { vValidator } from "@hono/valibot-validator";
 import { Resource } from "sst";
-
-import submissions from "./submissions";
+import * as v from "valibot";
 
 export default new Hono()
+  .use(
+    jwt({
+      secret: Resource.JwtSecret.privateKeyPem,
+      alg: jwtAlgorithm.hono,
+      cookie: "jwt",
+    }),
+  )
   .post(
     "/",
-    validator(
-      "param",
-      vValidator(PostFormPathParams, {
-        Error: BadRequestError,
-        message: "Invalid path parameters",
-      }),
-    ),
-    validator(
+    vValidator("query", v.object({ siteId: Uuid })),
+    vValidator(
       "json",
-      vValidator(PostFormJson, {
-        Error: BadRequestError,
-        message: "Invalid request body",
+      v.objectAsync({
+        name: FormName,
+        schema: FormSchema,
+        emails: v.optional(FormEmails),
       }),
     ),
     async (c) => {
-      const { siteId } = c.req.valid("param");
+      const { sub: email } = c.get("jwtPayload");
+
+      const { siteId } = c.req.valid("query");
       const formId = c.get("requestId");
-      const { name, schema } = c.req.valid("json");
 
       const { client, marshall } = c.get("ddb");
 
@@ -43,10 +51,22 @@ export default new Hono()
         new PutItemCommand({
           TableName: Resource.Table.name,
           Item: {
-            [PK]: marshall(pk({ prefix: prefix.site, value: siteId })),
-            [SK]: marshall(sk([{ prefix: prefix.form, value: formId }])),
-            name: marshall(name),
-            schema: schema ? { M: marshall(schema) } : { NULL: true },
+            [PK]: marshall(pk({ prefix: prefix.email, value: email })),
+            [SK]: marshall(
+              sk([
+                { prefix: prefix.site, value: siteId },
+                { prefix: prefix.form, value: formId },
+              ]),
+            ),
+            [GSI1PK]: marshall(pk({ prefix: prefix.site, value: siteId })),
+            [GSI1SK]: marshall(sk([{ prefix: prefix.form, value: formId }])),
+            ...Object.entries(c.req.valid("json")).reduce(
+              (fields, [key, value]) => ({
+                ...fields,
+                [key]: marshall(value),
+              }),
+              {} as Record<string, AttributeValue>,
+            ),
             createdAt: marshall(new Date().toISOString()),
           },
         }),
@@ -57,50 +77,70 @@ export default new Hono()
   )
   .patch(
     "/:formId",
-    validator(
-      "param",
-      vValidator(PatchFormPathParams, {
-        Error: BadRequestError,
-        message: "Invalid path parameters",
-      }),
-    ),
-    validator(
+    vValidator("param", v.object({ formId: Uuid })),
+    vValidator("query", v.object({ siteId: Uuid })),
+    vValidator(
       "json",
-      vValidator(PatchFormJson, {
-        Error: BadRequestError,
-        message: "Invalid request body",
-      }),
+      v.pipeAsync(
+        v.partialAsync(
+          v.objectAsync({
+            name: FormName,
+            schema: FormSchema,
+            emails: FormEmails,
+          }),
+        ),
+        v.checkAsync(
+          (input) => Object.values(input).some((value) => value !== undefined),
+          "At least one field is required",
+        ),
+      ),
     ),
     async (c) => {
+      const { sub: email } = c.get("jwtPayload");
+
       const { client, marshall } = c.get("ddb");
 
-      const { siteId, formId } = c.req.valid("param");
-      const { name, schema } = c.req.valid("json");
+      const { siteId } = c.req.valid("query");
+      const { formId } = c.req.valid("param");
 
       client.send(
         new UpdateItemCommand({
           TableName: Resource.Table.name,
           Key: {
-            [PK]: marshall(pk({ prefix: prefix.site, value: siteId })),
-            [SK]: marshall(sk([{ prefix: prefix.form, value: formId }])),
+            [PK]: marshall(pk({ prefix: prefix.email, value: email })),
+            [SK]: marshall(
+              sk([
+                { prefix: prefix.site, value: siteId },
+                { prefix: prefix.form, value: formId },
+              ]),
+            ),
+            [GSI1PK]: marshall(pk({ prefix: prefix.site, value: siteId })),
+            [GSI1SK]: marshall(sk([{ prefix: prefix.form, value: formId }])),
           },
-          UpdateExpression: name
-            ? "SET #name = :name AND SET #schema = :schema"
-            : "SET #schema = :schema",
-          ExpressionAttributeNames: {
-            "#name": "name",
-            "#schema": "schema",
-          },
-          ExpressionAttributeValues: name
-            ? {
-                ":name": marshall(name),
-                ":schema": marshall(schema),
+          ...Object.entries(c.req.valid("json")).reduce(
+            (input, [key, value]) => {
+              if (value) {
+                const set = `SET #${key} = :${key}`;
+                input.UpdateExpression = input.UpdateExpression
+                  ? input.UpdateExpression.concat(` AND ${set}`)
+                  : set;
+
+                input.ExpressionAttributeNames[`#${key}`] = key;
+                input.ExpressionAttributeValues[`:${key}`] = marshall(value);
               }
-            : {
-                ":schema": marshall(schema),
-              },
+
+              return input;
+            },
+            {} as Required<
+              Pick<
+                UpdateItemCommandInput,
+                | "UpdateExpression"
+                | "ExpressionAttributeNames"
+                | "ExpressionAttributeValues"
+              >
+            >,
+          ),
         }),
       );
     },
-  )
-  .route("/:formId/submissions", submissions);
+  );

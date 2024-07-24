@@ -11,10 +11,13 @@
   },
   "devDependencies": {
     "@cactus/eslint-config": "workspace:*",
-    "@tsconfig/node20": "^20.1.4"
+    "@tsconfig/node20": "^20.1.4",
+    "@types/react": "^18.3.3"
   },
   "dependencies": {
     "ajv": "^8.17.1",
+    "jsx-email": "^1.12.1",
+    "react": "^18.3.1",
     "valibot": "^0.36.0"
   }
 }

@@ -1,26 +1,37 @@
 import * as v from "valibot";
 
-import { Uuid } from "./utils";
+import { GSI1PK, GSI1SK, PK, SK } from "../constants";
+import { validateSchema } from "./ajv";
 
-export const PostFormPathParams = v.object({
-  siteId: Uuid,
-});
-export type PostFormPathParams = v.InferOutput<typeof PostFormPathParams>;
+export const FormName = v.pipe(v.string(), v.trim());
+export type FormName = v.InferOutput<typeof FormName>;
 
-export const FormSchema = v.nullish(v.looseObject({}));
+export const FormSchema = v.pipeAsync(
+  v.nullish(v.looseObject({})),
+  v.checkAsync(async (schema) => {
+    if (!schema) return true;
+
+    const result = await Promise.resolve(validateSchema(schema));
+
+    return Boolean(result);
+  }),
+);
 export type FormSchema = v.InferOutput<typeof FormSchema>;
 
-export const PostFormJson = v.object({
-  name: v.pipe(v.string(), v.trim()),
-  schema: FormSchema,
-});
-export type PostFormJson = v.InferOutput<typeof PostFormJson>;
+export const FormEmails = v.pipe(
+  v.array(v.pipe(v.string(), v.email())),
+  v.minLength(1),
+  v.maxLength(3),
+);
 
-export const PatchFormPathParams = v.object({
-  siteId: Uuid,
-  formId: Uuid,
+export const Form = v.objectAsync({
+  [PK]: v.string(),
+  [SK]: v.string(),
+  [GSI1PK]: v.string(),
+  [GSI1SK]: v.string(),
+  name: FormName,
+  schema: v.nullableAsync(FormSchema),
+  emails: v.nullable(FormEmails),
+  createdAt: v.pipe(v.string(), v.isoTimestamp()),
 });
-export type PatchFormPathParams = v.InferOutput<typeof PatchFormPathParams>;
-
-export const PatchFormJson = v.partial(PostFormJson);
-export type PatchFormJson = v.InferOutput<typeof PatchFormJson>;
+export type Form = v.InferOutput<typeof Form>;
