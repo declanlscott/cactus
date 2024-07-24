@@ -1,18 +1,14 @@
 import { Hono } from "hono";
 import {
   AttributeValue,
+  GetItemCommand,
   PutItemCommand,
+  QueryCommand,
   UpdateItemCommand,
   UpdateItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
-import {
-  GSI1PK,
-  GSI1SK,
-  jwtAlgorithm,
-  PK,
-  prefix,
-  SK,
-} from "@cactus/core/constants";
+import { gsi1, PK, prefix, SK } from "@cactus/core/constants";
+import { NotFoundError } from "@cactus/core/errors";
 import { FormEmails, FormName, FormSchema, Uuid } from "@cactus/core/schemas";
 import { pk, sk } from "@cactus/core/utils";
 import { vValidator } from "@hono/valibot-validator";
@@ -42,7 +38,7 @@ export default new Hono()
 
       const { client, marshall } = c.get("ddb");
 
-      client.send(
+      await client.send(
         new PutItemCommand({
           TableName: Resource.Table.name,
           Item: {
@@ -53,8 +49,8 @@ export default new Hono()
                 { prefix: prefix.form, value: formId },
               ]),
             ),
-            [GSI1PK]: marshall(pk({ prefix: prefix.site, value: siteId })),
-            [GSI1SK]: marshall(sk([{ prefix: prefix.form, value: formId }])),
+            [gsi1.pk]: marshall(pk({ prefix: prefix.site, value: siteId })),
+            [gsi1.sk]: marshall(sk([{ prefix: prefix.form, value: formId }])),
             ...Object.entries(c.req.valid("json")).reduce(
               (fields, [key, value]) => ({
                 ...fields,
@@ -68,6 +64,89 @@ export default new Hono()
       );
 
       return c.json({ formId }, { status: 201 });
+    },
+  )
+  .get("/", vValidator("query", v.object({ siteId: Uuid })), async (c) => {
+    const { sub: email } = c.get("jwtPayload");
+
+    const { siteId } = c.req.valid("query");
+
+    const { client, marshall, unmarshall } = c.get("ddb");
+
+    const { Items } = await client.send(
+      new QueryCommand({
+        TableName: Resource.Table.name,
+        KeyConditionExpression: "#pk = :pk AND begins_with(#sk, :sk)",
+        ExpressionAttributeNames: {
+          "#pk": PK,
+          "#sk": SK,
+        },
+        ExpressionAttributeValues: {
+          ":pk": marshall(pk({ prefix: prefix.email, value: email })),
+          ":sk": marshall(
+            `${sk([{ prefix: prefix.site, value: siteId }])}${prefix.form}`,
+          ),
+        },
+      }),
+    );
+
+    const forms = Items?.map((Item) =>
+      Object.entries(Item).reduce(
+        (form, [key, value]) => {
+          const unmarshalled = unmarshall(value);
+
+          form[key] =
+            unmarshalled instanceof Set ? [...unmarshalled] : unmarshalled;
+
+          return form;
+        },
+        {} as Record<string, unknown>,
+      ),
+    );
+
+    return c.json({ forms });
+  })
+  .get(
+    "/:formId",
+    vValidator("param", v.object({ formId: Uuid })),
+    vValidator("query", v.object({ siteId: Uuid })),
+    async (c) => {
+      const { sub: email } = c.get("jwtPayload");
+
+      const { formId } = c.req.valid("param");
+      const { siteId } = c.req.valid("query");
+
+      const { client, marshall, unmarshall } = c.get("ddb");
+
+      const { Item } = await client.send(
+        new GetItemCommand({
+          TableName: Resource.Table.name,
+          Key: {
+            [PK]: marshall(pk({ prefix: prefix.email, value: email })),
+            [SK]: marshall(
+              sk([
+                { prefix: prefix.site, value: siteId },
+                { prefix: prefix.form, value: formId },
+              ]),
+            ),
+          },
+        }),
+      );
+      if (!Item) throw new NotFoundError("Form not found");
+
+      const form = Object.entries(Item).reduce(
+        (form, [key, value]) => {
+          const unmarshalled = unmarshall(value);
+
+          form[key] =
+            unmarshalled instanceof Set ? [...unmarshalled] : unmarshalled;
+
+          return form;
+        },
+        {} as Record<string, unknown>,
+      );
+
+      return c.json({ form });
     },
   )
   .patch(
@@ -93,12 +172,12 @@ export default new Hono()
     async (c) => {
       const { sub: email } = c.get("jwtPayload");
 
-      const { client, marshall } = c.get("ddb");
+      const { client, marshall, unmarshall } = c.get("ddb");
 
       const { siteId } = c.req.valid("query");
       const { formId } = c.req.valid("param");
 
-      client.send(
+      const { Attributes } = await client.send(
         new UpdateItemCommand({
           TableName: Resource.Table.name,
           Key: {
@@ -109,19 +188,27 @@ export default new Hono()
                 { prefix: prefix.form, value: formId },
               ]),
             ),
-            [GSI1PK]: marshall(pk({ prefix: prefix.site, value: siteId })),
-            [GSI1SK]: marshall(sk([{ prefix: prefix.form, value: formId }])),
           },
           ...Object.entries(c.req.valid("json")).reduce(
             (input, [key, value]) => {
               if (value) {
-                const set = `SET #${key} = :${key}`;
-                input.UpdateExpression = input.UpdateExpression
-                  ? input.UpdateExpression.concat(` AND ${set}`)
-                  : set;
+                const keyName = `#${key}`;
+                const valueName = `:${key}`;
+                const action = `${keyName} = ${valueName}`;
 
-                input.ExpressionAttributeNames[`#${key}`] = key;
-                input.ExpressionAttributeValues[`:${key}`] = marshall(value);
+                return {
+                  UpdateExpression: input.UpdateExpression
+                    ? input.UpdateExpression.concat(`, ${action}`)
+                    : `SET ${action}`,
+                  ExpressionAttributeNames: {
+                    ...input.ExpressionAttributeNames,
+                    [keyName]: key,
+                  },
+                  ExpressionAttributeValues: {
+                    ...input.ExpressionAttributeValues,
+                    [valueName]: marshall(value),
+                  },
+                };
               }
 
               return input;
@@ -135,7 +222,24 @@ export default new Hono()
               >
             >,
           ),
+          ReturnValues: "ALL_NEW",
         }),
       );
+
+      if (!Attributes) throw new NotFoundError("Form not found");
+
+      const form = Object.entries(Attributes).reduce(
+        (form, [key, value]) => {
+          const unmarshalled = unmarshall(value);
+
+          form[key] =
+            unmarshalled instanceof Set ? [...unmarshalled] : unmarshalled;
+
+          return form;
+        },
+        {} as Record<string, unknown>,
+      );
+
+      return c.json({ form });
     },
   );

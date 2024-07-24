@@ -13,7 +13,7 @@ importers:
         version: link:packages/core
       sst:
         specifier: ion
-        version: 0.1.22(hono@4.5.1)
+        version: 0.1.29(hono@4.5.1)
     devDependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.3.1
@@ -22,8 +22,8 @@ importers:
         specifier: ^20.1.4
         version: 20.1.4
       '@types/node':
-        specifier: ^20.14.11
-        version: 20.14.11
+        specifier: ^20.14.12
+        version: 20.14.12
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
@@ -38,7 +38,7 @@ importers:
         version: 8.17.1
       jsx-email:
         specifier: ^1.12.1
-        version: 1.12.1(@jsx-email/app-preview@1.2.6(@types/node@20.14.11)(@types/react@18.3.3)(react@18.3.1)(rollup@3.29.4))(@types/node@20.14.11)(@types/react@18.3.3)(react@18.3.1)(rollup@3.29.4)
+        version: 1.12.1(@jsx-email/app-preview@1.2.6(@types/node@20.14.12)(@types/react@18.3.3)(react@18.3.1)(rollup@3.29.4))(@types/node@20.14.12)(@types/react@18.3.3)(react@18.3.1)(rollup@3.29.4)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -1785,8 +1785,8 @@ packages:
   '@types/mdast@4.0.4':
     resolution: {integrity: sha512-kGaNbPh1k7AFzgpud/gMdvIm5xuECykRR+JnWKQno9TAXVa6WIVCGTPvYGekIDL4uwCZQSYbUxNBSb1aUo79oA==}
 
-  '@types/node@20.14.11':
-    resolution: {integrity: sha512-kprQpL8MMeszbz6ojB5/tU8PLN4kesnN8Gjzw349rDlNgsSzg90lAVj3llK99Dh7JON+t9AuscPPFW6mPbTnSA==}
+  '@types/node@20.14.12':
+    resolution: {integrity: sha512-r7wNXakLeSsGT0H1AU863vS2wa5wBOK4bWMjZz2wj+8nBx+m5PeIn0k8AloSLpRuiwdRQZwarZqHE4FNArPuJQ==}
 
   '@types/prop-types@15.7.12':
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
@@ -3536,33 +3536,33 @@ packages:
   space-separated-tokens@2.0.2:
     resolution: {integrity: sha512-PEGlAwrG8yXGXRjW32fGbg66JAlOAwbObuqVoJpv/mRgoWDQfgH1wDPvtzWyUSNAXBGSk8h755YDbbcEy3SH2Q==}
 
-  sst-darwin-arm64@0.1.22:
-    resolution: {integrity: sha512-Xv/D0OCNMUy/o3JhzaqvjW6vEeOtCwP2pHBI5PbsG7BSkmIbUqAkFClF9dRP/mQ+A0lzzahxx+lV7Dxzts5T8g==}
+  sst-darwin-arm64@0.1.29:
+    resolution: {integrity: sha512-XZqaku/NrLl2pigsVuwJaHis3tx1RppVzc78wH43oSSu1Sz6iNvzVPhBqshGfXslSeYAdloH53UkXQfb7YwNuw==}
     cpu: [arm64]
     os: [darwin]
 
-  sst-darwin-x64@0.1.22:
-    resolution: {integrity: sha512-9qAmbPEQhLcJJmgNhaJAf7ZVCW3vGb5A95BIPEK8Rb71xBcpUwLHWtwBMGeK1oIv7WEm5GnXhWcA0mSu2V/Jew==}
+  sst-darwin-x64@0.1.29:
+    resolution: {integrity: sha512-JiaCT9OlxL3dciUCXBCPrScAecr7BOE0Yw78TvbfNKQzDzPmD1YPbkzbu1UoFbTINS2t34PSyQd3Fafu6rBwtw==}
     cpu: [x64]
     os: [darwin]
 
-  sst-linux-arm64@0.1.22:
-    resolution: {integrity: sha512-Sruw7Ho4I7CcBMkzWO96BxZS115L1QVc6vec0btyecX9hYgnpyXzn+7iARGycepO2pagIiy1wEemgzuurNVhBw==}
+  sst-linux-arm64@0.1.29:
+    resolution: {integrity: sha512-tuIRHUvOqIpbBErnMcXEuVdBkBezZg9tvxroWW8QLlOhAEYlvsIoTD3vjpdn3672+9wE6MMkCew8rAI6vEYwhg==}
     cpu: [arm64]
     os: [linux]
 
-  sst-linux-x64@0.1.22:
-    resolution: {integrity: sha512-FA0dQefqhz00BzzihiWpHw4E6nEfX9LCk7dyyoTyZprrLkTWmYgg29StlXCEpDyOWj4CdYVNktOoD6FljRA+hw==}
+  sst-linux-x64@0.1.29:
+    resolution: {integrity: sha512-dsolNO5SW9vrmqKfOxvrcZXm0xyll925VdCcHBMN/HvpB52gvS46kU9xXUgGg+XC8BglkKcrsvhiQRmBbrrRpA==}
     cpu: [x64]
     os: [linux]
 
-  sst-linux-x86@0.1.22:
-    resolution: {integrity: sha512-ZzBm43OH43NAZ5FHvQj/I9sheGvwg30/B6PSUBHmOB2SpRPoPBvdbZ8qckrf2x99CBuTAhpoBBVk/62SCP0OnQ==}
+  sst-linux-x86@0.1.29:
+    resolution: {integrity: sha512-V/f0NJysFdni2UHGQ8Y/3Ic7gvE6m72PIGT9hxxoEeK4E+ZkfraebH1DJIzxhtvnkungQuubvuK51NKbAUyb6g==}
     cpu: [x86]
     os: [linux]
 
-  sst@0.1.22:
-    resolution: {integrity: sha512-zHlknE06IBUBI1t7LXhfbB9hL9axrwbbM9Pi02dMKj8cO8mLmbjk2NUWBuaWY/9gn3ULy7sQcQE1l2lgW2koEw==}
+  sst@0.1.29:
+    resolution: {integrity: sha512-9g9Ej6KKbCbDrkXDXQTLT/M4VxfHrkb0BwIPWBe2yIFjPkNOQEa7OWaAn3x7MQ5U1rUsJIxpEuCrCYCmzT5T5g==}
     hasBin: true
     peerDependencies:
       hono: 4.x
@@ -3858,8 +3858,8 @@ packages:
   yallist@4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
 
-  yaml@2.4.5:
-    resolution: {integrity: sha512-aBx2bnqDzVOyNKfsysjA2ms5ZlnjSAW2eG3/L5G/CSujfjLJTJsEw1bGw8kCf04KodQWk1pxlGnZ56CRxiawmg==}
+  yaml@2.5.0:
+    resolution: {integrity: sha512-2wWLbGbYDiSqqIKoPjar3MPgB94ErzCtrNE1FdqGuaO0pi2JGjmE8aW8TDZwzU7vuxcGRdL/4gPQwQ7hD5AMSw==}
     engines: {node: '>= 14'}
     hasBin: true
 
@@ -5085,7 +5085,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@jsx-email/app-preview@1.2.6(@types/node@20.14.11)(@types/react@18.3.3)(react@18.3.1)(rollup@3.29.4)':
+  '@jsx-email/app-preview@1.2.6(@types/node@20.14.12)(@types/react@18.3.3)(react@18.3.1)(rollup@3.29.4)':
     dependencies:
       '@radix-ui/colors': 3.0.0
       '@radix-ui/react-collapsible': 1.0.3(@types/react@18.3.3)(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
@@ -5094,7 +5094,7 @@ snapshots:
       '@radix-ui/react-select': 2.1.1(@types/react@18.3.3)(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-slot': 1.0.2(@types/react@18.3.3)(react@18.3.1)
       '@radix-ui/react-toggle-group': 1.0.4(@types/react@18.3.3)(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
-      '@vitejs/plugin-react': 4.3.1(vite@4.5.3(@types/node@20.14.11))
+      '@vitejs/plugin-react': 4.3.1(vite@4.5.3(@types/node@20.14.12))
       classnames: 2.3.2
       framer-motion: 10.16.16(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
       react: 18.3.1
@@ -5104,8 +5104,8 @@ snapshots:
       superstruct: 1.0.4
       tailwindcss: 3.4.0
       titleize: 4.0.0
-      vite: 4.5.3(@types/node@20.14.11)
-      vite-plugin-node-polyfills: 0.16.0(rollup@3.29.4)(vite@4.5.3(@types/node@20.14.11))
+      vite: 4.5.3(@types/node@20.14.12)
+      vite-plugin-node-polyfills: 0.16.0(rollup@3.29.4)(vite@4.5.3(@types/node@20.14.12))
     transitivePeerDependencies:
       - '@types/node'
       - '@types/react'
@@ -6243,7 +6243,7 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.2
 
-  '@types/node@20.14.11':
+  '@types/node@20.14.12':
     dependencies:
       undici-types: 5.26.5
 
@@ -6390,14 +6390,14 @@ snapshots:
     dependencies:
       '@unocss/core': 0.58.9
 
-  '@vitejs/plugin-react@4.3.1(vite@4.5.3(@types/node@20.14.11))':
+  '@vitejs/plugin-react@4.3.1(vite@4.5.3(@types/node@20.14.12))':
     dependencies:
       '@babel/core': 7.24.9
       '@babel/plugin-transform-react-jsx-self': 7.24.7(@babel/core@7.24.9)
       '@babel/plugin-transform-react-jsx-source': 7.24.7(@babel/core@7.24.9)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 4.5.3(@types/node@20.14.11)
+      vite: 4.5.3(@types/node@20.14.12)
     transitivePeerDependencies:
       - supports-color
 
@@ -7482,10 +7482,10 @@ snapshots:
 
   json5@2.2.3: {}
 
-  jsx-email@1.12.1(@jsx-email/app-preview@1.2.6(@types/node@20.14.11)(@types/react@18.3.3)(react@18.3.1)(rollup@3.29.4))(@types/node@20.14.11)(@types/react@18.3.3)(react@18.3.1)(rollup@3.29.4):
+  jsx-email@1.12.1(@jsx-email/app-preview@1.2.6(@types/node@20.14.12)(@types/react@18.3.3)(react@18.3.1)(rollup@3.29.4))(@types/node@20.14.12)(@types/react@18.3.3)(react@18.3.1)(rollup@3.29.4):
     dependencies:
       '@dot/log': 0.1.5
-      '@jsx-email/app-preview': 1.2.6(@types/node@20.14.11)(@types/react@18.3.3)(react@18.3.1)(rollup@3.29.4)
+      '@jsx-email/app-preview': 1.2.6(@types/node@20.14.12)(@types/react@18.3.3)(react@18.3.1)(rollup@3.29.4)
       '@jsx-email/doiuse-email': 1.0.1
       '@jsx-email/minify-preset': 1.0.1
       '@radix-ui/react-slot': 1.0.2(@types/react@18.3.3)(react@18.3.1)
@@ -7496,7 +7496,7 @@ snapshots:
       '@unocss/preset-wind': 0.58.9
       '@unocss/transformer-compile-class': 0.58.9
       '@unocss/transformer-variant-group': 0.58.9
-      '@vitejs/plugin-react': 4.3.1(vite@4.5.3(@types/node@20.14.11))
+      '@vitejs/plugin-react': 4.3.1(vite@4.5.3(@types/node@20.14.12))
       autoprefixer: 10.4.19(postcss@8.4.39)
       chalk: 4.1.2
       classnames: 2.5.1
@@ -7525,8 +7525,8 @@ snapshots:
       superstruct: 1.0.4
       titleize: 4.0.0
       unist-util-visit: 5.0.0
-      vite: 4.5.3(@types/node@20.14.11)
-      vite-plugin-node-polyfills: 0.16.0(rollup@3.29.4)(vite@4.5.3(@types/node@20.14.11))
+      vite: 4.5.3(@types/node@20.14.12)
+      vite-plugin-node-polyfills: 0.16.0(rollup@3.29.4)(vite@4.5.3(@types/node@20.14.12))
       yargs-parser: 21.1.1
     transitivePeerDependencies:
       - '@types/node'
@@ -7902,7 +7902,7 @@ snapshots:
   postcss-load-config@4.0.2(postcss@8.4.39):
     dependencies:
       lilconfig: 3.1.2
-      yaml: 2.4.5
+      yaml: 2.5.0
     optionalDependencies:
       postcss: 8.4.39
 
@@ -8313,22 +8313,22 @@ snapshots:
 
   space-separated-tokens@2.0.2: {}
 
-  sst-darwin-arm64@0.1.22:
+  sst-darwin-arm64@0.1.29:
     optional: true
 
-  sst-darwin-x64@0.1.22:
+  sst-darwin-x64@0.1.29:
     optional: true
 
-  sst-linux-arm64@0.1.22:
+  sst-linux-arm64@0.1.29:
     optional: true
 
-  sst-linux-x64@0.1.22:
+  sst-linux-x64@0.1.29:
     optional: true
 
-  sst-linux-x86@0.1.22:
+  sst-linux-x86@0.1.29:
     optional: true
 
-  sst@0.1.22(hono@4.5.1):
+  sst@0.1.29(hono@4.5.1):
     dependencies:
       '@aws-sdk/client-lambda': 3.478.0
       aws4fetch: 1.0.19
@@ -8336,11 +8336,11 @@ snapshots:
       openid-client: 5.6.4
     optionalDependencies:
       hono: 4.5.1
-      sst-darwin-arm64: 0.1.22
-      sst-darwin-x64: 0.1.22
-      sst-linux-arm64: 0.1.22
-      sst-linux-x64: 0.1.22
-      sst-linux-x86: 0.1.22
+      sst-darwin-arm64: 0.1.29
+      sst-darwin-x64: 0.1.29
+      sst-linux-arm64: 0.1.29
+      sst-linux-x64: 0.1.29
+      sst-linux-x86: 0.1.29
     transitivePeerDependencies:
       - aws-crt
 
@@ -8591,23 +8591,23 @@ snapshots:
       unist-util-stringify-position: 4.0.0
       vfile-message: 4.0.2
 
-  vite-plugin-node-polyfills@0.16.0(rollup@3.29.4)(vite@4.5.3(@types/node@20.14.11)):
+  vite-plugin-node-polyfills@0.16.0(rollup@3.29.4)(vite@4.5.3(@types/node@20.14.12)):
     dependencies:
       '@rollup/plugin-inject': 5.0.5(rollup@3.29.4)
       buffer-polyfill: buffer@6.0.3
       node-stdlib-browser: 1.2.0
       process: 0.11.10
-      vite: 4.5.3(@types/node@20.14.11)
+      vite: 4.5.3(@types/node@20.14.12)
     transitivePeerDependencies:
       - rollup
 
-  vite@4.5.3(@types/node@20.14.11):
+  vite@4.5.3(@types/node@20.14.12):
     dependencies:
       esbuild: 0.18.20
       postcss: 8.4.39
       rollup: 3.29.4
     optionalDependencies:
-      '@types/node': 20.14.11
+      '@types/node': 20.14.12
       fsevents: 2.3.3
 
   vm-browserify@1.1.2: {}
@@ -8648,7 +8648,7 @@ snapshots:
 
   yallist@4.0.0: {}
 
-  yaml@2.4.5: {}
+  yaml@2.5.0: {}
 
   yargs-parser@21.1.1: {}
 

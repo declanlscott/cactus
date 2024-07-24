@@ -11,6 +11,7 @@ import { HttpError } from "@cactus/core/errors";
 import { v7 } from "uuid";
 import { isValiError } from "valibot";
 
+import auth from "./routes/auth";
 import forms from "./routes/forms";
 import sites from "./routes/sites";
 import submissions from "./routes/submissions";
@@ -21,8 +22,12 @@ declare module "hono" {
   interface ContextVariableMap {
     ddb: {
       client: DynamoDBClient;
-      marshall: typeof marshall;
-      unmarshall: typeof unmarshall;
+      marshall: (
+        data: Parameters<typeof marshall>[0],
+      ) => ReturnType<typeof marshall>;
+      unmarshall: (
+        data: Parameters<typeof unmarshall>[0],
+      ) => ReturnType<typeof unmarshall>;
     };
     ses: {
       client: SESv2Client;
@@ -43,20 +48,15 @@ const api = new Hono()
   .use(async (c, next) => {
     c.set("ddb", {
       client: new DynamoDBClient(),
-      marshall: (data: unknown) =>
-        marshall(data, {
-          convertClassInstanceToMap: true,
-          convertEmptyValues: true,
-        }),
+      marshall: (data) => marshall(data, { convertTopLevelContainer: true }),
       unmarshall: (data) =>
-        unmarshall(data, {
-          convertWithoutMapWrapper: true,
-        }),
+        unmarshall(data, { convertWithoutMapWrapper: true }),
     });
     c.set("ses", { client: new SESv2Client() });
 
     await next();
   })
+  .route("/auth", auth)
   .route("/sites", sites)
   .route("/forms", forms)
   .route("/submissions", submissions)

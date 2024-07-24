@@ -3,7 +3,7 @@ import { setCookie } from "hono/cookie";
 import { sign, verify } from "hono/jwt";
 import { SendEmailCommand } from "@aws-sdk/client-sesv2";
 import { jwtAlgorithm } from "@cactus/core/constants";
-import { LoginTemplate, render } from "@cactus/core/email";
+import { MagicLinkTemplate, render } from "@cactus/core/email";
 import { JwtPayload } from "@cactus/core/schemas";
 import { vValidator } from "@hono/valibot-validator";
 import { Resource } from "sst";
@@ -33,9 +33,9 @@ export default new Hono()
       magicLink.pathname = "/auth/callback";
       magicLink.searchParams.set("jwt", jwt);
 
-      c.get("ses").client.send(
+      await c.get("ses").client.send(
         new SendEmailCommand({
-          FromEmailAddress: Resource.Email.sender,
+          FromEmailAddress: `cactus@${Resource.Email.sender}`,
           Destination: {
             ToAddresses: [email],
           },
@@ -47,7 +47,9 @@ export default new Hono()
               Body: {
                 Html: {
                   Charset: "UTF-8",
-                  Data: await render(<LoginTemplate magicLink={magicLink} />),
+                  Data: await render(
+                    <MagicLinkTemplate magicLink={magicLink} />,
+                  ),
                 },
               },
             },

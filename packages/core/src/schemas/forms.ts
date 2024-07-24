@@ -1,6 +1,6 @@
 import * as v from "valibot";
 
-import { GSI1PK, GSI1SK, PK, SK } from "../constants";
+import { gsi1, PK, SK } from "../constants";
 import { validateSchema } from "./ajv";
 
 export const FormName = v.pipe(v.string(), v.trim());
@@ -27,11 +27,11 @@ export const FormEmails = v.pipe(
 export const Form = v.objectAsync({
   [PK]: v.string(),
   [SK]: v.string(),
-  [GSI1PK]: v.string(),
-  [GSI1SK]: v.string(),
+  [gsi1.pk]: v.string(),
+  [gsi1.sk]: v.string(),
   name: FormName,
-  schema: v.nullableAsync(FormSchema),
-  emails: v.nullable(FormEmails),
+  schema: v.nullishAsync(FormSchema),
+  emails: v.nullish(FormEmails),
   createdAt: v.pipe(v.string(), v.isoTimestamp()),
 });
 export type Form = v.InferOutput<typeof Form>;

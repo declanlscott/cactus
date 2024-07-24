@@ -2,8 +2,11 @@ import { createPrefix } from "../utils/keys";
 
 export const PK = "pk";
 export const SK = "sk";
-export const GSI1PK = "gsi1pk";
-export const GSI1SK = "gsi1sk";
+export const gsi1 = {
+  name: "Gsi1",
+  pk: "gsi1pk",
+  sk: "gsi1sk",
+} as const;
 
 export const KEY_DELIMITER = "#";
 

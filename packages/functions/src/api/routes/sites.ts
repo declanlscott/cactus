@@ -1,5 +1,9 @@
 import { Hono } from "hono";
-import { AttributeValue, PutItemCommand } from "@aws-sdk/client-dynamodb";
+import {
+  AttributeValue,
+  PutItemCommand,
+  QueryCommand,
+} from "@aws-sdk/client-dynamodb";
 import { PK, prefix, SK } from "@cactus/core/constants";
 import { JwtPayload, SiteName } from "@cactus/core/schemas";
 import { pk, sk } from "@cactus/core/utils";
@@ -18,7 +22,7 @@ export default new Hono()
 
     const siteId = c.get("requestId");
 
-    client.send(
+    await client.send(
       new PutItemCommand({
         TableName: Resource.Table.name,
         Item: {

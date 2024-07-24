@@ -1,9 +1,9 @@
 import { Body, Html, Link, Preview, Text } from "jsx-email";
 
-export type LoginTemplateProps = {
+export type MagicLinkTemplateProps = {
   magicLink: URL;
 };
-export function LoginTemplate(props: LoginTemplateProps) {
+export function MagicLinkTemplate(props: MagicLinkTemplateProps) {
   return (
     <Html>
       <Preview>Login to Cactus with this magic link.</Preview>
