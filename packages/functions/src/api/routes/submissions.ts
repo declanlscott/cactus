@@ -2,7 +2,6 @@ import { Hono } from "hono";
 import { validator } from "hono/validator";
 import {
   AttributeValue,
-  GetItemCommand,
   PutItemCommand,
   QueryCommand,
 } from "@aws-sdk/client-dynamodb";
