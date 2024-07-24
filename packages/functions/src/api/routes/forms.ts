@@ -1,5 +1,4 @@
 import { Hono } from "hono";
-import { jwt } from "hono/jwt";
 import {
   AttributeValue,
   PutItemCommand,
@@ -20,14 +19,10 @@ import { vValidator } from "@hono/valibot-validator";
 import { Resource } from "sst";
 import * as v from "valibot";
 
+import { authorization } from "../middleware";
+
 export default new Hono()
-  .use(
-    jwt({
-      secret: Resource.JwtSecret.privateKeyPem,
-      alg: jwtAlgorithm.hono,
-      cookie: "jwt",
-    }),
-  )
+  .use(authorization)
   .post(
     "/",
     vValidator("query", v.object({ siteId: Uuid })),

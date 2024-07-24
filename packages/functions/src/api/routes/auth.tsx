@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { setCookie } from "hono/cookie";
-import { jwt, sign, verify } from "hono/jwt";
+import { sign, verify } from "hono/jwt";
 import { SendEmailCommand } from "@aws-sdk/client-sesv2";
 import { jwtAlgorithm } from "@cactus/core/constants";
 import { LoginTemplate, render } from "@cactus/core/email";
@@ -8,6 +8,8 @@ import { JwtPayload } from "@cactus/core/schemas";
 import { vValidator } from "@hono/valibot-validator";
 import { Resource } from "sst";
 import * as v from "valibot";
+
+import { authorization } from "../middleware";
 
 export default new Hono()
   .get(
@@ -86,20 +88,12 @@ export default new Hono()
       return c.json({ payload, jwt });
     },
   )
-  .post(
-    "/logout",
-    jwt({
-      secret: Resource.JwtSecret.privateKeyPem,
-      alg: jwtAlgorithm.hono,
-      cookie: "jwt",
-    }),
-    async (c) => {
-      setCookie(c, "jwt", "", {
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict",
-      });
+  .post("/logout", authorization, async (c) => {
+    setCookie(c, "jwt", "", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    });
 
-      return c.body(null, { status: 204 });
-    },
-  );
+    return c.body(null, { status: 204 });
+  });

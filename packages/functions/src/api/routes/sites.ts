@@ -1,21 +1,16 @@
 import { Hono } from "hono";
-import { jwt } from "hono/jwt";
 import { AttributeValue, PutItemCommand } from "@aws-sdk/client-dynamodb";
-import { jwtAlgorithm, PK, prefix, SK } from "@cactus/core/constants";
+import { PK, prefix, SK } from "@cactus/core/constants";
 import { JwtPayload, SiteName } from "@cactus/core/schemas";
 import { pk, sk } from "@cactus/core/utils";
 import { vValidator } from "@hono/valibot-validator";
 import { Resource } from "sst";
 import * as v from "valibot";
 
+import { authorization } from "../middleware";
+
 export default new Hono()
-  .use(
-    jwt({
-      secret: Resource.JwtSecret.privateKeyPem,
-      alg: jwtAlgorithm.hono,
-      cookie: "jwt",
-    }),
-  )
+  .use(authorization)
   .post("/", vValidator("json", v.object({ name: SiteName })), async (c) => {
     const { sub: email } = v.parse(JwtPayload, c.get("jwtPayload"));
 
