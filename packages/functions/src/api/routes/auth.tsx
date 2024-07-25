@@ -3,7 +3,7 @@ import { setCookie } from "hono/cookie";
 import { sign, verify } from "hono/jwt";
 import { SendEmailCommand } from "@aws-sdk/client-sesv2";
 import { jwtAlgorithm } from "@cactus/core/constants";
-import { MagicLinkTemplate, render } from "@cactus/core/email";
+import { MagicLinkTemplate, render } from "@cactus/core/emails";
 import { JwtPayload } from "@cactus/core/schemas";
 import { vValidator } from "@hono/valibot-validator";
 import { Resource } from "sst";
