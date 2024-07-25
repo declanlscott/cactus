@@ -11,8 +11,3 @@ export const gsi1 = {
 export const KEY_DELIMITER = "#";
 
 export const prefix = createPrefix(["email", "site", "form", "submission"]);
-
-export const jwtAlgorithm = {
-  tls: "ED25519",
-  hono: "EdDSA",
-} as const;

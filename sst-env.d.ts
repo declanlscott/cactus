@@ -13,8 +13,8 @@ declare module "sst" {
       type: "sst.aws.Email"
     }
     JwtSecret: {
-      privateKeyPem: string
       type: "tls.index/privateKey.PrivateKey"
+      value: string
     }
     Sender: {
       type: "sst.sst.Secret"

@@ -1,5 +1,5 @@
-sst.Linkable.wrap(tls.PrivateKey, ({ privateKeyPem }) => ({
-  properties: { privateKeyPem },
+sst.Linkable.wrap(tls.PrivateKey, (privateKey) => ({
+  properties: { value: privateKey.privateKeyPemPkcs8 },
 }));
 
 export * from "./api";

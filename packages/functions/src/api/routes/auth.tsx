@@ -2,7 +2,6 @@ import { Hono } from "hono";
 import { setCookie } from "hono/cookie";
 import { sign, verify } from "hono/jwt";
 import { SendEmailCommand } from "@aws-sdk/client-sesv2";
-import { jwtAlgorithm } from "@cactus/core/constants";
 import { MagicLinkTemplate, render } from "@cactus/core/emails";
 import { JwtPayload } from "@cactus/core/schemas";
 import { vValidator } from "@hono/valibot-validator";
@@ -23,11 +22,7 @@ export default new Hono()
         exp: Math.floor(Date.now() / 1000) + 60 * 10, // 10 minutes
       } satisfies JwtPayload;
 
-      const jwt = await sign(
-        payload,
-        Resource.JwtSecret.privateKeyPem,
-        jwtAlgorithm.hono,
-      );
+      const jwt = await sign(payload, Resource.JwtSecret.value, "RS256");
 
       const magicLink = new URL(new URL(c.req.url).origin);
       magicLink.pathname = "/auth/callback";
@@ -66,8 +61,8 @@ export default new Hono()
     async (c) => {
       const { sub } = await verify(
         c.req.valid("query").jwt,
-        Resource.JwtSecret.privateKeyPem,
-        jwtAlgorithm.hono,
+        Resource.JwtSecret.value,
+        "RS256",
       ).then((payload) => v.parse(JwtPayload, payload));
 
       const payload = {
@@ -75,11 +70,7 @@ export default new Hono()
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30, // 30 days
       } satisfies JwtPayload;
 
-      const jwt = await sign(
-        payload,
-        Resource.JwtSecret.privateKeyPem,
-        jwtAlgorithm.hono,
-      );
+      const jwt = await sign(payload, Resource.JwtSecret.value, "RS256");
 
       setCookie(c, "jwt", jwt, {
         httpOnly: true,
