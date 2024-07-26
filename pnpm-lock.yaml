@@ -13,11 +13,14 @@ importers:
         version: link:packages/core
       sst:
         specifier: ion
-        version: 0.1.38(hono@4.5.1)
+        version: 0.1.42(hono@4.5.1)
     devDependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.3.1
         version: 4.3.1(prettier@3.3.3)
+      '@total-typescript/ts-reset':
+        specifier: ^0.5.1
+        version: 0.5.1
       '@tsconfig/node20':
         specifier: ^20.1.4
         version: 20.1.4
@@ -1763,6 +1766,9 @@ packages:
   '@smithy/util-waiter@3.1.2':
     resolution: {integrity: sha512-4pP0EV3iTsexDx+8PPGAKCQpd/6hsQBaQhqWzU4hqKPHN5epPsxKbvUTIiYIHTxaKt6/kEaqPBpu/ufvfbrRzw==}
     engines: {node: '>=16.0.0'}
+
+  '@total-typescript/ts-reset@0.5.1':
+    resolution: {integrity: sha512-AqlrT8YA1o7Ff5wPfMOL0pvL+1X+sw60NN6CcOCqs658emD6RfiXhF7Gu9QcfKBH7ELY2nInLhKSCWVoNL70MQ==}
 
   '@tsconfig/node20@20.1.4':
     resolution: {integrity: sha512-sqgsT69YFeLWf5NtJ4Xq/xAF8p4ZQHlmGW74Nu2tD4+g5fAsposc4ZfaaPixVu4y01BEiDCWLRDCvDM5JOsRxg==}
@@ -3546,33 +3552,33 @@ packages:
   space-separated-tokens@2.0.2:
     resolution: {integrity: sha512-PEGlAwrG8yXGXRjW32fGbg66JAlOAwbObuqVoJpv/mRgoWDQfgH1wDPvtzWyUSNAXBGSk8h755YDbbcEy3SH2Q==}
 
-  sst-darwin-arm64@0.1.38:
-    resolution: {integrity: sha512-YVxqurhVo5GE0zgqsBk6/DaELqImtwd5eG5RtP4dNe4GTOJAEBr4X/z5Xw5bv6d8ZlBFfUKc6LL2j/ObUmDVNA==}
+  sst-darwin-arm64@0.1.42:
+    resolution: {integrity: sha512-7+KdIBZbXTdhy/3leYzhXSH68++zrsSnrMiwpQVdYX4Npv145dMIYM9H+QO2NEytGdmHH/rqAsuJ1Mlx2JrHtw==}
     cpu: [arm64]
     os: [darwin]
 
-  sst-darwin-x64@0.1.38:
-    resolution: {integrity: sha512-I/AiuM+OQHFmPx9vNnclMuO2GQepdw+wppIv81pSO6ppRvhvsPMQe+nDwz/Gr4bFeLpi9isPhLRgKuMkKiiOPw==}
+  sst-darwin-x64@0.1.42:
+    resolution: {integrity: sha512-vYlvg9PApFeBIyyLGN6z3PAAzuJN6qmjapO++JLmtBaAXYN/7NxvOJHl6YtBkqqpUTtDVkCTF7cbSMK73Hz5+Q==}
     cpu: [x64]
     os: [darwin]
 
-  sst-linux-arm64@0.1.38:
-    resolution: {integrity: sha512-Pe3xa/a4akkiEmWLe1LDL5mtBxiwcMsads8HxzlNnzD16CWEraZLD0+A8I1jqiM2PXoJ4axB4+SupaGXFsVS9Q==}
+  sst-linux-arm64@0.1.42:
+    resolution: {integrity: sha512-r5Ea8U61yXCIgrOOOkaiCsQBwH2c3PBaVe9XK7XzE0EvBQR3upRC/nDE7Oq4xo/29I1/1eYkncsDfwTL4/LU1w==}
     cpu: [arm64]
     os: [linux]
 
-  sst-linux-x64@0.1.38:
-    resolution: {integrity: sha512-3g6T0bmFnpL2GQbvml91s832CnzJSf95iZap34UWYDt+IM6jpJwyCQ62bgrHR3x2A+HiqaK47CStRrsrPgxIGA==}
+  sst-linux-x64@0.1.42:
+    resolution: {integrity: sha512-X4upHz3LCDrZJ7z+Gzo6Pln7QoHRmjbRz+F6w0bUKFj90JzrVbHxqHQHn29MmuNCmfmfz9z1flAG7KVkVSmJ5A==}
     cpu: [x64]
     os: [linux]
 
-  sst-linux-x86@0.1.38:
-    resolution: {integrity: sha512-VuOD0Ov96KPwrGyUv8VuO/x2/h/7QkUGcNOu0RyiHzhqPToaGO/uhCo6zp7XoHS1a+qEbd94H/ijm3wDLvHMzA==}
+  sst-linux-x86@0.1.42:
+    resolution: {integrity: sha512-bkTjJs6jXkCGQtlVssa111MxO3dHUbnKtFoPBtQn112CY/iTU1K7JABwKHL7H3c34XI4lpFEtI4WSzt688Rx4g==}
     cpu: [x86]
     os: [linux]
 
-  sst@0.1.38:
-    resolution: {integrity: sha512-MFm5RiMNk+dm3/Z4Uhl2TxZ5EuLvxQxLvaDHdcYguoSo14vJu0QIU2qojNcxEWAcn1pkIDLI0bZ6yUWaTDqjpg==}
+  sst@0.1.42:
+    resolution: {integrity: sha512-BcHOu5xiNQl1Y/Z26q1ArAyk8a9K/W0kTAWcXBRdxYS9UBGfTGe/Ym0rC8bH94vQigFT5m/kehNRBjx5zuuFkg==}
     hasBin: true
     peerDependencies:
       hono: 4.x
@@ -6220,6 +6226,8 @@ snapshots:
       '@smithy/types': 3.3.0
       tslib: 2.6.3
 
+  '@total-typescript/ts-reset@0.5.1': {}
+
   '@tsconfig/node20@20.1.4': {}
 
   '@types/aws-lambda@8.10.142': {}
@@ -8331,22 +8339,22 @@ snapshots:
 
   space-separated-tokens@2.0.2: {}
 
-  sst-darwin-arm64@0.1.38:
+  sst-darwin-arm64@0.1.42:
     optional: true
 
-  sst-darwin-x64@0.1.38:
+  sst-darwin-x64@0.1.42:
     optional: true
 
-  sst-linux-arm64@0.1.38:
+  sst-linux-arm64@0.1.42:
     optional: true
 
-  sst-linux-x64@0.1.38:
+  sst-linux-x64@0.1.42:
     optional: true
 
-  sst-linux-x86@0.1.38:
+  sst-linux-x86@0.1.42:
     optional: true
 
-  sst@0.1.38(hono@4.5.1):
+  sst@0.1.42(hono@4.5.1):
     dependencies:
       '@aws-sdk/client-lambda': 3.478.0
       aws4fetch: 1.0.19
@@ -8354,11 +8362,11 @@ snapshots:
       openid-client: 5.6.4
     optionalDependencies:
       hono: 4.5.1
-      sst-darwin-arm64: 0.1.38
-      sst-darwin-x64: 0.1.38
-      sst-linux-arm64: 0.1.38
-      sst-linux-x64: 0.1.38
-      sst-linux-x86: 0.1.38
+      sst-darwin-arm64: 0.1.42
+      sst-darwin-x64: 0.1.42
+      sst-linux-arm64: 0.1.42
+      sst-linux-x64: 0.1.42
+      sst-linux-x86: 0.1.42
     transitivePeerDependencies:
       - aws-crt
 

@@ -5,7 +5,7 @@ import {
   PutItemCommand,
   QueryCommand,
 } from "@aws-sdk/client-dynamodb";
-import { gsi1, PK, prefix, SK } from "@cactus/core/constants";
+import { gsi, PK, prefix, SK } from "@cactus/core/constants";
 import { NotFoundError } from "@cactus/core/errors";
 import { ajvValidator, Form, Uuid } from "@cactus/core/schemas";
 import { pk, sk } from "@cactus/core/utils";
@@ -27,11 +27,11 @@ export default new Hono()
       const output = await client.send(
         new QueryCommand({
           TableName: Resource.Table.name,
-          IndexName: gsi1.name,
+          IndexName: gsi.one.name,
           KeyConditionExpression: "#pk = :pk AND #sk = :sk",
           ExpressionAttributeNames: {
-            "#pk": gsi1.pk,
-            "#sk": gsi1.sk,
+            "#pk": gsi.one.pk,
+            "#sk": gsi.one.sk,
           },
           ExpressionAttributeValues: {
             ":pk": marshall(pk({ prefix: prefix.site, value: siteId })),
@@ -90,13 +90,16 @@ export default new Hono()
                 { prefix: prefix.submission, value: submissionId },
               ]),
             ),
-            [gsi1.pk]: marshall(pk({ prefix: prefix.site, value: siteId })),
-            [gsi1.sk]: marshall(
+            [gsi.one.pk]: marshall(pk({ prefix: prefix.site, value: siteId })),
+            [gsi.one.sk]: marshall(
               sk([
                 { prefix: prefix.form, value: formId },
                 { prefix: prefix.submission, value: submissionId },
               ]),
             ),
+            createdAt: marshall(new Date().toISOString()),
+            emailSent: marshall(false),
+            submissionId: marshall(submissionId),
             ...Object.entries(c.req.valid("form")).reduce(
               (fields, [key, value]) => ({
                 ...fields,
@@ -104,7 +107,6 @@ export default new Hono()
               }),
               {} as Record<string, AttributeValue>,
             ),
-            createdAt: marshall(new Date().toISOString()),
           },
         }),
       );

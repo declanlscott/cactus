@@ -7,7 +7,7 @@ import {
   UpdateItemCommand,
   UpdateItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
-import { gsi1, PK, prefix, SK } from "@cactus/core/constants";
+import { gsi, PK, prefix, SK } from "@cactus/core/constants";
 import { NotFoundError } from "@cactus/core/errors";
 import { FormEmails, FormName, FormSchema, Uuid } from "@cactus/core/schemas";
 import { pk, sk } from "@cactus/core/utils";
@@ -49,8 +49,10 @@ export default new Hono()
                 { prefix: prefix.form, value: formId },
               ]),
             ),
-            [gsi1.pk]: marshall(pk({ prefix: prefix.site, value: siteId })),
-            [gsi1.sk]: marshall(sk([{ prefix: prefix.form, value: formId }])),
+            [gsi.one.pk]: marshall(pk({ prefix: prefix.site, value: siteId })),
+            [gsi.one.sk]: marshall(
+              sk([{ prefix: prefix.form, value: formId }]),
+            ),
             ...Object.entries(c.req.valid("json")).reduce(
               (fields, [key, value]) => ({
                 ...fields,

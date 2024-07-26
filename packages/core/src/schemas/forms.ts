@@ -1,6 +1,6 @@
 import * as v from "valibot";
 
-import { gsi1, PK, SK } from "../constants";
+import { gsi, PK, SK } from "../constants";
 import { validateSchema } from "./ajv";
 
 export const FormName = v.pipe(v.string(), v.trim());
@@ -27,8 +27,8 @@ export const FormEmails = v.pipe(
 export const Form = v.objectAsync({
   [PK]: v.string(),
   [SK]: v.string(),
-  [gsi1.pk]: v.string(),
-  [gsi1.sk]: v.string(),
+  [gsi.one.pk]: v.string(),
+  [gsi.one.sk]: v.string(),
   name: FormName,
   schema: v.nullishAsync(FormSchema),
   emails: v.nullish(FormEmails),
