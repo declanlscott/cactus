@@ -2,6 +2,7 @@ import {
   AttributeValue,
   DynamoDBClient,
   GetItemCommand,
+  UpdateItemCommand,
 } from "@aws-sdk/client-dynamodb";
 import { SendEmailCommand, SESv2Client } from "@aws-sdk/client-sesv2";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
@@ -50,7 +51,7 @@ export const handler: DynamoDBStreamHandler = async (event) => {
         createdAt,
         emailSent,
         submissionId,
-        ...submission
+        ...data
       }) => {
         const skSegments = sortKey.split(KEY_DELIMITER);
         const siteId = skSegments.at(1);
@@ -90,7 +91,7 @@ export const handler: DynamoDBStreamHandler = async (event) => {
           Object.entries(siteItem).reduce(
             (site, [key, value]) => ({
               ...site,
-              [key]: unmarshall(value),
+              [key]: unmarshall(value, { convertWithoutMapWrapper: true }),
             }),
             {} as Record<string, unknown>,
           ),
@@ -101,7 +102,9 @@ export const handler: DynamoDBStreamHandler = async (event) => {
             Form,
             Object.entries(formItem).reduce(
               (form, [key, value]) => {
-                const unmarshalled = unmarshall(value);
+                const unmarshalled = unmarshall(value, {
+                  convertWithoutMapWrapper: true,
+                });
 
                 form[key] =
                   unmarshalled instanceof Set
@@ -123,7 +126,18 @@ export const handler: DynamoDBStreamHandler = async (event) => {
           });
 
         return {
-          submission,
+          submission: {
+            id: submissionId,
+            key: {
+              pk: partitionKey,
+              sk: sk([
+                { prefix: prefix.site, value: siteId },
+                { prefix: prefix.form, value: formId },
+                { prefix: prefix.submission, value: submissionId },
+              ]),
+            },
+            data,
+          },
           form,
           site: {
             name: site.name,
@@ -139,38 +153,58 @@ export const handler: DynamoDBStreamHandler = async (event) => {
     return result;
   });
 
-  // Send emails for each submission
   await Promise.allSettled(
     data
       .filter((result) => result.status === "fulfilled")
       .map(async ({ value }) =>
-        ses.send(
-          new SendEmailCommand({
-            FromEmailAddress: `cactus@${Resource.Sender.value}`,
-            Destination: {
-              ToAddresses: value.form.emails,
-            },
-            Content: {
-              Simple: {
-                Subject: {
-                  Data: `New submission from ${value.site.name}: ${value.form.name}`,
-                },
-                Body: {
-                  Html: {
-                    Charset: "UTF-8",
-                    Data: await render(
-                      <SubmissionTemplate
-                        siteName={value.site.name}
-                        formName={value.form.name}
-                        submission={value.submission}
-                      />,
-                    ),
+        // Send email
+        ses
+          .send(
+            new SendEmailCommand({
+              FromEmailAddress: `cactus@${Resource.Sender.value}`,
+              Destination: {
+                ToAddresses: value.form.emails,
+              },
+              Content: {
+                Simple: {
+                  Subject: {
+                    Data: `New submission from ${value.site.name}: ${value.form.name}`,
+                  },
+                  Body: {
+                    Html: {
+                      Charset: "UTF-8",
+                      Data: await render(
+                        <SubmissionTemplate
+                          siteName={value.site.name}
+                          formName={value.form.name}
+                          submission={value.submission}
+                        />,
+                      ),
+                    },
                   },
                 },
               },
-            },
-          }),
-        ),
+            }),
+          )
+          .then(() =>
+            // Update emailSent flag
+            ddb.send(
+              new UpdateItemCommand({
+                TableName: Resource.Table.name,
+                Key: {
+                  [PK]: marshall(value.submission.key.pk),
+                  [SK]: marshall(value.submission.key.sk),
+                },
+                UpdateExpression: "SET #emailSent = :emailSent",
+                ExpressionAttributeNames: {
+                  "#emailSent": "emailSent",
+                },
+                ExpressionAttributeValues: {
+                  ":emailSent": marshall(true),
+                },
+              }),
+            ),
+          ),
       ),
   ).then((result) =>
     result
