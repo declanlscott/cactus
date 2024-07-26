@@ -17,7 +17,8 @@ const ddb = new DynamoDBClient();
 const ses = new SESv2Client();
 
 export const handler: DynamoDBStreamHandler = async (event) => {
-  const result = v.safeParse(
+  // Parse submissions from stream event
+  const submissions = v.parse(
     v.array(
       v.looseObject({
         [PK]: v.string(),
@@ -38,10 +39,9 @@ export const handler: DynamoDBStreamHandler = async (event) => {
       ),
   );
 
-  if (!result.success) return;
-
+  // Fetch site and form data for each submission
   const data = await Promise.allSettled(
-    result.output.map(
+    submissions.map(
       async ({
         pk: partitionKey,
         sk: sortKey,
@@ -131,13 +131,16 @@ export const handler: DynamoDBStreamHandler = async (event) => {
         };
       },
     ),
-  );
+  ).then((result) => {
+    result
+      .filter((result) => result.status === "rejected")
+      .forEach(({ reason }) => console.error(reason));
 
-  data
-    .filter((result) => result.status === "rejected")
-    .forEach(({ reason }) => console.error(reason));
+    return result;
+  });
 
-  const outputs = await Promise.allSettled(
+  // Send emails for each submission
+  await Promise.allSettled(
     data
       .filter((result) => result.status === "fulfilled")
       .map(async ({ value }) =>
@@ -169,9 +172,9 @@ export const handler: DynamoDBStreamHandler = async (event) => {
           }),
         ),
       ),
+  ).then((result) =>
+    result
+      .filter((result) => result.status === "rejected")
+      .forEach(({ reason }) => console.error(reason)),
   );
-
-  outputs
-    .filter((result) => result.status === "rejected")
-    .forEach(({ reason }) => console.error(reason));
 };
