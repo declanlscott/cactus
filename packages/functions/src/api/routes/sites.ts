@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { AttributeValue, PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { PutItemCommand } from "@aws-sdk/client-dynamodb";
 import { PK, prefix, SK } from "@cactus/core/constants";
 import { JwtPayload, SiteName } from "@cactus/core/schemas";
 import { pk, sk } from "@cactus/core/utils";
@@ -8,6 +8,8 @@ import { Resource } from "sst";
 import * as v from "valibot";
 
 import { authorization } from "../middleware";
+
+import type { AttributeValue } from "@aws-sdk/client-dynamodb";
 
 export default new Hono()
   .use(authorization)

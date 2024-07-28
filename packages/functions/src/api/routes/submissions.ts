@@ -1,10 +1,6 @@
 import { Hono } from "hono";
 import { validator } from "hono/validator";
-import {
-  AttributeValue,
-  PutItemCommand,
-  QueryCommand,
-} from "@aws-sdk/client-dynamodb";
+import { PutItemCommand, QueryCommand } from "@aws-sdk/client-dynamodb";
 import { gsi, PK, prefix, SK } from "@cactus/core/constants";
 import { NotFoundError } from "@cactus/core/errors";
 import { ajvValidator, Form, Uuid } from "@cactus/core/schemas";
@@ -14,6 +10,8 @@ import { Resource } from "sst";
 import * as v from "valibot";
 
 import { authorization } from "../middleware";
+
+import type { AttributeValue } from "@aws-sdk/client-dynamodb";
 
 export default new Hono()
   .post(

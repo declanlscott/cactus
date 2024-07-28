@@ -7,9 +7,9 @@ module.exports = {
     "plugin:@typescript-eslint/stylistic-type-checked",
     "prettier",
   ],
-  ignorePatterns: ["dist", ".eslintrc.cjs", "sst-env.d.ts"],
+  ignorePatterns: [".eslintrc.cjs", "sst-env.d.ts"],
   parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint", "drizzle"],
+  plugins: ["@typescript-eslint"],
   rules: {
     "@typescript-eslint/array-type": "off",
     "@typescript-eslint/consistent-type-definitions": "off",

@@ -10,7 +10,7 @@
     "@aws-sdk/util-dynamodb": "^3.620.0",
     "@cactus/core": "workspace:*",
     "@hono/valibot-validator": "^0.3.0",
-    "hono": "^4.5.1",
+    "hono": "^4.5.2",
     "react": "^18.3.1",
     "uuid": "^10.0.0",
     "valibot": "^0.36.0"

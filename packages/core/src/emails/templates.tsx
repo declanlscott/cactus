@@ -1,4 +1,3 @@
-import { AttributeValue } from "aws-lambda";
 import { Body, Html, Link, Preview, Text } from "jsx-email";
 
 export type MagicLinkTemplateProps = {
@@ -22,6 +21,7 @@ export function MagicLinkTemplate(props: MagicLinkTemplateProps) {
   );
 }
 
+// TODO: Implement the `SubmissionTemplate` component
 export type SubmissionTemplateProps = {
   siteName: string;
   formName: string;

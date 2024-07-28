@@ -1,11 +1,9 @@
 import { Hono } from "hono";
 import {
-  AttributeValue,
   GetItemCommand,
   PutItemCommand,
   QueryCommand,
   UpdateItemCommand,
-  UpdateItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { gsi, PK, prefix, SK } from "@cactus/core/constants";
 import { NotFoundError } from "@cactus/core/errors";
@@ -16,6 +14,11 @@ import { Resource } from "sst";
 import * as v from "valibot";
 
 import { authorization } from "../middleware";
+
+import type {
+  AttributeValue,
+  UpdateItemCommandInput,
+} from "@aws-sdk/client-dynamodb";
 
 export default new Hono()
   .use(authorization)

@@ -20,6 +20,10 @@ import type { Form } from "@cactus/core/schemas";
 
 declare module "hono" {
   interface ContextVariableMap {
+    jwtPayload: {
+      sub: string;
+      exp: string;
+    };
     ddb: {
       client: DynamoDBClient;
       marshall: (
@@ -48,6 +52,7 @@ const api = new Hono()
   .use(async (c, next) => {
     c.set("ddb", {
       client: new DynamoDBClient(),
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       marshall: (data) => marshall(data, { convertTopLevelContainer: true }),
       unmarshall: (data) =>
         unmarshall(data, { convertWithoutMapWrapper: true }),

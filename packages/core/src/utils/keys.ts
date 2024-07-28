@@ -1,5 +1,6 @@
 import { KEY_DELIMITER } from "../constants";
-import { Prefix, WithPrefix } from "../types/keys";
+
+import type { Prefix, WithPrefix } from "../types/keys";
 
 export const createPrefix = <TKey extends string>(
   keys: Array<TKey>,

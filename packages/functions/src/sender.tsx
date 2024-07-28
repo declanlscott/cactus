@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-  AttributeValue,
   DynamoDBClient,
   GetItemCommand,
   UpdateItemCommand,
@@ -10,9 +10,11 @@ import { gsi, KEY_DELIMITER, PK, prefix, SK } from "@cactus/core/constants";
 import { render, SubmissionTemplate } from "@cactus/core/emails";
 import { Form, SiteName, Uuid } from "@cactus/core/schemas";
 import { sk } from "@cactus/core/utils";
-import { DynamoDBStreamHandler } from "aws-lambda";
 import { Resource } from "sst";
 import * as v from "valibot";
+
+import type { AttributeValue } from "@aws-sdk/client-dynamodb";
+import type { DynamoDBStreamHandler } from "aws-lambda";
 
 const ddb = new DynamoDBClient();
 const ses = new SESv2Client();
@@ -56,7 +58,7 @@ export const handler: DynamoDBStreamHandler = async (event) => {
         const skSegments = sortKey.split(KEY_DELIMITER);
         const siteId = skSegments.at(1);
         const formId = skSegments.at(3);
-        if (!formId || !siteId) throw new Error(`Invalid ${[SK]}: ${sortKey}`);
+        if (!formId || !siteId) throw new Error(`Invalid ${SK}: ${sortKey}`);
 
         const [{ Item: siteItem }, { Item: formItem }] = await Promise.all([
           ddb.send(

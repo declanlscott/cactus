@@ -1,4 +1,4 @@
-import { KEY_DELIMITER } from "../constants";
+import type { KEY_DELIMITER } from "../constants";
 
 export type KeyDelimiter = typeof KEY_DELIMITER;
 
